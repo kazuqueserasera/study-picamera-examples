@@ -29,6 +29,11 @@ class FaceDetector(object):
         return jpeg.tobytes()
 
     def process_image(self, frame):
+        # Create a black image
+        img = np.zeros((512,512,3), np.uint8)
+
+        # Draw a diagonal blue line with thickness of 5 px
+        cv2.line(img,(0,0),(511,511),(255,0,0),5)
         # opencvでframe(カラー画像)をグレースケールに変換
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
