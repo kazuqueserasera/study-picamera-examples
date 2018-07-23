@@ -29,11 +29,6 @@ class FaceDetector(object):
         return jpeg.tobytes()
 
     def process_image(self, frame):
-        # Create a black image
-        img = np.zeros((512,512,3), np.uint8)
-
-        # Draw a diagonal blue line with thickness of 5 px
-        cv2.line(img,(0,0),(511,511),(255,0,0),5)
         # opencvでframe(カラー画像)をグレースケールに変換
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -45,6 +40,7 @@ class FaceDetector(object):
         # 顔の位置を描画する
         for (x,y,w,h) in faces:
             cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-
+        font = cv2.FONT_HERSHEY_SIMPLEX
+            cv2.putText(img,'OpenCV',(10,500), font, 4,(255,255,255),2,cv2.LINE_AA)
         # frameを戻り値として返す
         return frame
