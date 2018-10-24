@@ -76,15 +76,13 @@ class PersonDetector(object):
             y = startY - 15 if startY - 15 > 15 else startY + 15
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
             count = count + 1
-            if count > 0:
-                print('Count: {}'.format(count))
-                elapsed = time.time() - self.last_upload
-                if elapsed > 60:
-                    cv2.imwrite('hello.jpg', frame)
-                    upload()
-                    self.last_upload = time.time()
+            
          if count > 0:
              print('Count: {}'.format(count))
-             upload()
-            
+             elapsed = time.time() - self.last_upload
+             if elapsed > 60:
+                 cv2.imwrite('hello.jpg', frame)
+                 upload()
+                 self.last_upload = time.time()
+
         return frame
