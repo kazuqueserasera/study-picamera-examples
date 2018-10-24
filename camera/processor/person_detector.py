@@ -31,6 +31,7 @@ def upload():
 
 class PersonDetector(object):
     def __init__(self, flip = True):
+        self.last_upload = time.time() # この行を新しく追加
         self.vs = PiVideoStream(resolution=(800, 608)).start()
         self.flip = flip
         time.sleep(2.0)
@@ -55,7 +56,9 @@ class PersonDetector(object):
         blob = cv2.dnn.blobFromImage(frame, 0.007843, (300, 300), 127.5)
         net.setInput(blob)
         detections = net.forward()
-
+        
+        count=0
+        
         for i in np.arange(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
 
@@ -72,5 +75,16 @@ class PersonDetector(object):
             cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
             y = startY - 15 if startY - 15 > 15 else startY + 15
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-
+            count = count + 1
+            if count > 0:
+                print('Count: {}'.format(count))
+                elapsed = time.time() - self.last_upload
+                if elapsed > 60:
+                    cv2.imwrite('hello.jpg', frame)
+                    upload()
+        self.last_upload = time.time()
+         if count > 0:
+             print('Count: {}'.format(count))
+             upload()
+            
         return frame
