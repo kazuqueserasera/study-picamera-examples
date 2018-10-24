@@ -1,14 +1,14 @@
 from __future__ import print_function
 from imutils.video.pivideostream import PiVideoStream
-from imutils.object_detection import non_max_suppression
 import imutils
 import time
-import datetime
 import numpy as np
 import cv2
+
 import os
 import sys
 import requests
+
 
 try:
     SLACK_URL = os.environ['SLACK_URL']
@@ -19,6 +19,7 @@ except KeyError as e:
 
 net = cv2.dnn.readNetFromCaffe('/home/pi/models/MobileNetSSD_deploy.prototxt',
         '/home/pi/models/MobileNetSSD_deploy.caffemodel')
+        
 
 def upload():
     image = { 'file': open('hello.jpg', 'rb') }
@@ -29,9 +30,10 @@ def upload():
     }
     requests.post(SLACK_URL, params=payload, files=image)
 
+
 class PersonDetector(object):
     def __init__(self, flip = True):
-        self.last_upload = time.time() # この行を新しく追加
+        self.last_upload = time.time()
         self.vs = PiVideoStream(resolution=(800, 608)).start()
         self.flip = flip
         time.sleep(2.0)
@@ -56,9 +58,8 @@ class PersonDetector(object):
         blob = cv2.dnn.blobFromImage(frame, 0.007843, (300, 300), 127.5)
         net.setInput(blob)
         detections = net.forward()
-        
-        count=0
-        
+
+        count = 0
         for i in np.arange(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
 
@@ -75,9 +76,9 @@ class PersonDetector(object):
             cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
             y = startY - 15 if startY - 15 > 15 else startY + 15
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-            count = count + 1
-            
-         if count > 0:
+            count += 1
+        
+        if count > 0:
             print('Count: {}'.format(count))
             elapsed = time.time() - self.last_upload
             if elapsed > 60:
