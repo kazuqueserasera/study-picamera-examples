@@ -30,9 +30,6 @@ def upload():
         'channels': [SLACK_CHANNEL],
     }
     requests.post(SLACK_URL, params=payload, files=image)
-    print(SLACK_URL)
-    print(payload)
-    print(files)
 
 class PersonDetector(object):
     def __init__(self, flip = True):
