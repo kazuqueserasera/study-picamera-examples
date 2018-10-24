@@ -87,3 +87,5 @@ class PersonDetector(object):
                 self.last_upload = time.time()
                 
         return frame
+
+    
