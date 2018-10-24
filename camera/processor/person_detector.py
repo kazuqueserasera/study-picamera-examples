@@ -1,6 +1,5 @@
 from __future__ import print_function
 from imutils.video.pivideostream import PiVideoStream
-from imutils.object_detection import non_max_suppression
 import imutils
 import time
 import numpy as np
@@ -30,6 +29,7 @@ def upload():
         'channels': [SLACK_CHANNEL],
     }
     requests.post(SLACK_URL, params=payload, files=image)
+
 
 class PersonDetector(object):
     def __init__(self, flip = True):
@@ -85,5 +85,5 @@ class PersonDetector(object):
                 cv2.imwrite('hello.jpg', frame)
                 upload()
                 self.last_upload = time.time()
-             
+                
         return frame
