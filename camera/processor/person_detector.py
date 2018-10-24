@@ -84,5 +84,6 @@ class PersonDetector(object):
                  cv2.imwrite('hello.jpg', frame)
                  upload()
                  self.last_upload = time.time()
+                
 
         return frame
